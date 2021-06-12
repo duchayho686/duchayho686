@@ -1,0 +1,204 @@
+local ScreenGui = Instance.new("ScreenGui")
+local openmain = Instance.new("Frame")
+local open = Instance.new("TextButton")
+local main = Instance.new("Frame")
+local title1 = Instance.new("TextLabel")
+local title2 = Instance.new("TextLabel")
+local Instakill = Instance.new("TextButton")
+local VBHub = Instance.new("TextButton")
+local close = Instance.new("TextButton")
+
+--Properties:
+
+ScreenGui.Parent = game.CoreGui
+
+openmain.Name = "openmain"
+openmain.Parent = ScreenGui
+openmain.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+openmain.Position = UDim2.new(0.0176297743, 0, 0.251893938, 0)
+openmain.Size = UDim2.new(0, 90, 0, 40)
+openmain.Active = true
+openmain.Draggable = true
+
+
+open.Name = "open"
+open.Parent = openmain
+open.BackgroundColor3 = Color3.fromRGB(85, 255, 255)
+open.Size = UDim2.new(0, 90, 0, 40)
+open.Font = Enum.Font.PermanentMarker
+open.Text = "OPEN"
+open.TextColor3 = Color3.fromRGB(0, 0, 0)
+open.TextScaled = true
+open.TextSize = 14.000
+open.TextWrapped = true
+open.MouseButton1Down:connect(function()
+	openmain.Visible = false
+	main.Visible = true
+end)
+
+main.Name = "main"
+main.Parent = ScreenGui
+main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+main.Position = UDim2.new(0.350908041, 0, 0.316287875, 0)
+main.Size = UDim2.new(0, 333, 0, 194)
+main.Visible = false
+main.Active = true
+main.Draggable = true
+
+title1.Name = "title1"
+title1.Parent = main
+title1.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+title1.Position = UDim2.new(-1.86264515e-09, 0, 0, 0)
+title1.Size = UDim2.new(0, 333, 0, 43)
+title1.Font = Enum.Font.Fantasy
+title1.Text = "Project Lazarus"
+title1.TextColor3 = Color3.fromRGB(0, 0, 0)
+title1.TextScaled = true
+title1.TextSize = 14.000
+title1.TextWrapped = true
+
+title2.Name = "title2"
+title2.Parent = main
+title2.BackgroundColor3 = Color3.fromRGB(255, 10, 14)
+title2.Position = UDim2.new(0.00300300308, 0, 0.768041253, 0)
+title2.Size = UDim2.new(0, 332, 0, 45)
+title2.Font = Enum.Font.Creepster
+title2.Text = "by:Duchayhoo"
+title2.TextColor3 = Color3.fromRGB(0, 0, 0)
+title2.TextScaled = true
+title2.TextSize = 14.000
+title2.TextWrapped = true
+
+Instakill.Name = "Instakill"
+Instakill.Parent = main
+Instakill.BackgroundColor3 = Color3.fromRGB(0, 255, 127)
+Instakill.Position = UDim2.new(0.0394183099, 0, 0.345556051, 0)
+Instakill.Size = UDim2.new(0, 123, 0, 59)
+Instakill.Font = Enum.Font.PatrickHand
+Instakill.Text = "Instakill"
+Instakill.TextColor3 = Color3.fromRGB(0, 0, 0)
+Instakill.TextScaled = true
+Instakill.TextSize = 14.000
+Instakill.TextWrapped = true
+Instakill.MouseButton1Down:connect(function()
+hookfunction(gcinfo, function()
+   return math.random(200,350)
+end)
+
+-- // Constants \\ --
+-- [ Services ] --
+local Services = setmetatable({}, {__index = function(Self, Index)
+   local NewService = game:GetService(Index)
+   if NewService then
+       Self[Index] = NewService
+   end
+   return NewService
+end})
+
+-- [ LocalPlayer ] --
+local LocalPlayer = Services.Players.LocalPlayer
+
+-- // Variables \\ --
+local Connections = {
+   Weapon1 = nil;
+   Weapon2 = nil;
+   Weapon3 = nil;
+   Backpack = nil;
+}
+
+local RoundNumber = workspace.RoundNum
+
+-- // Functions \\ --
+local function CharacterAdded(Character)
+   local Backpack = LocalPlayer:WaitForChild('Backpack')
+
+   local function ChildAdded(Child)
+       if Child.Name == "Weapon1" or Child.Name == "Weapon2" or Child.Name == "Weapon3" then
+           local Module = require(Child)
+           
+           if Connections[Child.Name] then
+               Connections[Child.Name]:Disconnect()
+               Connections[Child.Name] = nil
+           end
+
+           Connections[Child.Name] = Services.RunService.RenderStepped:Connect(function()
+               Module.Ammo = Module.MagSize + 1
+               Module.StoredAmmo = Module.MaxAmmo
+               Module.HeadShot = 150 + (RoundNumber.Value * 150)
+               Module.TorsoShot = 150 + (RoundNumber.Value * 150)
+               Module.LimbShot = 150 + (RoundNumber.Value * 150)
+               Module.BulletPenetration = 10
+           end)
+       end
+   end
+
+   if Connections.Backpack then
+       Connections.Backpack:Disconnect()
+       Connections.Backpack = nil
+   end
+
+   for i,v in ipairs(Backpack:GetChildren()) do
+       ChildAdded(v)
+   end
+   Connections.Backpack = Backpack.ChildAdded:Connect(ChildAdded)
+end
+
+-- // Event Listeners \\ --
+LocalPlayer.CharacterAdded:Connect(CharacterAdded)
+CharacterAdded(LocalPlayer.Character)
+
+-- // Metatable \\ --
+local RawMetatable = getrawmetatable(game)
+local __Namecall = RawMetatable.__namecall
+
+setreadonly(RawMetatable, false)
+
+RawMetatable.__namecall = newcclosure(function(Object, ...)
+   local NamecallMethod = getnamecallmethod()
+   local Arguments = {...}
+
+   if typeof(Object) == "Instance" and Object.IsA(Object, "RemoteEvent") then
+       if tostring(Object) == "Damage" and NamecallMethod == "FireServer" then
+           Arguments[1].Damage = Arguments[1].BodyPart.Parent.Humanoid.MaxHealth + 10
+       end
+   end
+
+   return __Namecall(Object, unpack(Arguments))
+end)
+
+setreadonly(RawMetatable, true)
+
+-- // Actions \\ --
+--LocalPlayer.Character.Health:Destroy()
+end)
+
+VBHub.Name = "VBHub"
+VBHub.Parent = main
+VBHub.BackgroundColor3 = Color3.fromRGB(0, 255, 127)
+VBHub.Position = UDim2.new(0.6006006, 0, 0.345360845, 0)
+VBHub.Size = UDim2.new(0, 123, 0, 59)
+VBHub.Font = Enum.Font.PatrickHand
+VBHub.Text = "VBHub"
+VBHub.TextColor3 = Color3.fromRGB(0, 0, 0)
+VBHub.TextScaled = true
+VBHub.TextSize = 14.000
+VBHub.TextWrapped = true
+VBHub.MouseButton1Down:connect(function()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/1201for/V.G-Hub/main/V.Ghub'))()
+end)
+
+close.Name = "close"
+close.Parent = main
+close.BackgroundColor3 = Color3.fromRGB(255, 5, 5)
+close.Position = UDim2.new(0.79879874, 0, 0, 0)
+close.Size = UDim2.new(0, 67, 0, 43)
+close.Font = Enum.Font.Oswald
+close.Text = "X"
+close.TextColor3 = Color3.fromRGB(0, 0, 0)
+close.TextScaled = true
+close.TextSize = 14.000
+close.TextWrapped = true
+close.MouseButton1Down:connect(function()
+	main.Visible = false
+	openmain.Visible = true
+end)
