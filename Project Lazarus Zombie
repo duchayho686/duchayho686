@@ -1,0 +1,404 @@
+-- by DUcvhayho
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local main = Instance.new("Frame")
+local VGHUBmain = Instance.new("Frame")
+local VGHUB = Instance.new("TextButton")
+local instakillmain = Instance.new("Frame")
+local instakill = Instance.new("TextButton")
+local SRmain = Instance.new("Frame")
+local SR = Instance.new("TextButton")
+local closemain = Instance.new("Frame")
+local close = Instance.new("TextButton")
+local title = Instance.new("TextLabel")
+local mainopen = Instance.new("Frame")
+local open = Instance.new("TextButton")
+
+--Properties:
+
+ScreenGui.Parent = game.CoreGui
+
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame.Position = UDim2.new(0.346718907, 0, 0.23863636, 0)
+Frame.Size = UDim2.new(0, 198, 0, 260)
+Frame.Visible = false
+Frame.Active = true
+Frame.Draggable = true
+
+main.Name = "main"
+main.Parent = Frame
+main.BackgroundColor3 = Color3.fromRGB(153, 153, 153)
+main.Position = UDim2.new(0.0347369947, 0, 0.132526815, 0)
+main.Size = UDim2.new(0, 184, 0, 218)
+
+VGHUBmain.Name = "VGHUBmain"
+VGHUBmain.Parent = main
+VGHUBmain.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+VGHUBmain.Position = UDim2.new(0.043478258, 0, 0.151376143, 0)
+VGHUBmain.Size = UDim2.new(0, 165, 0, 54)
+
+VGHUB.Name = "VGHUB"
+VGHUB.Parent = VGHUBmain
+VGHUB.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+VGHUB.Position = UDim2.new(-0.00665616104, 0, 0.129629627, 0)
+VGHUB.Size = UDim2.new(0, 166, 0, 47)
+VGHUB.Font = Enum.Font.GothamBold
+VGHUB.Text = "VGHUB"
+VGHUB.TextColor3 = Color3.fromRGB(255, 255, 255)
+VGHUB.TextScaled = true
+VGHUB.TextSize = 14.000
+VGHUB.TextWrapped = true
+VGHUB.MouseButton1Down:connect(function()
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/1201for/V.G-Hub/main/V.Ghub'))()
+
+end)
+
+instakillmain.Name = "instakillmain"
+instakillmain.Parent = main
+instakillmain.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+instakillmain.Position = UDim2.new(0.043478258, 0, 0.720183432, 0)
+instakillmain.Size = UDim2.new(0, 165, 0, 54)
+
+instakill.Name = "instakill"
+instakill.Parent = instakillmain
+instakill.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+instakill.Position = UDim2.new(-0.00635954738, 0, 0.11742425, 0)
+instakill.Size = UDim2.new(0, 166, 0, 47)
+instakill.Font = Enum.Font.GothamBold
+instakill.Text = "instakill"
+instakill.TextColor3 = Color3.fromRGB(252, 252, 252)
+instakill.TextScaled = true
+instakill.TextSize = 14.000
+instakill.TextWrapped = true
+instakill.MouseButton1Down:connect(function()
+	hookfunction(gcinfo, function()
+		return math.random(200,350)
+	end)
+
+	-- // Constants \\ --
+	-- [ Services ] --
+	local Services = setmetatable({}, {__index = function(Self, Index)
+		local NewService = game:GetService(Index)
+		if NewService then
+			Self[Index] = NewService
+		end
+		return NewService
+	end})
+
+	-- [ LocalPlayer ] --
+	local LocalPlayer = Services.Players.LocalPlayer
+
+	-- // Variables \\ --
+	local Connections = {
+		Weapon1 = nil;
+		Weapon2 = nil;
+		Weapon3 = nil;
+		Backpack = nil;
+	}
+
+	local RoundNumber = workspace.RoundNum
+
+	-- // Functions \\ --
+	local function CharacterAdded(Character)
+		local Backpack = LocalPlayer:WaitForChild('Backpack')
+
+		local function ChildAdded(Child)
+			if Child.Name == "Weapon1" or Child.Name == "Weapon2" or Child.Name == "Weapon3" then
+				local Module = require(Child)
+
+				if Connections[Child.Name] then
+					Connections[Child.Name]:Disconnect()
+					Connections[Child.Name] = nil
+				end
+
+				Connections[Child.Name] = Services.RunService.RenderStepped:Connect(function()
+					Module.Ammo = Module.MagSize + 1
+					Module.StoredAmmo = Module.MaxAmmo
+					Module.HeadShot = 150 + (RoundNumber.Value * 150)
+					Module.TorsoShot = 150 + (RoundNumber.Value * 150)
+					Module.LimbShot = 150 + (RoundNumber.Value * 150)
+					Module.BulletPenetration = 10
+				end)
+			end
+		end
+
+		if Connections.Backpack then
+			Connections.Backpack:Disconnect()
+			Connections.Backpack = nil
+		end
+
+		for i,v in ipairs(Backpack:GetChildren()) do
+			ChildAdded(v)
+		end
+		Connections.Backpack = Backpack.ChildAdded:Connect(ChildAdded)
+	end
+
+	-- // Event Listeners \\ --
+	LocalPlayer.CharacterAdded:Connect(CharacterAdded)
+	CharacterAdded(LocalPlayer.Character)
+
+	-- // Metatable \\ --
+	local RawMetatable = getrawmetatable(game)
+	local __Namecall = RawMetatable.__namecall
+
+	setreadonly(RawMetatable, false)
+
+	RawMetatable.__namecall = newcclosure(function(Object, ...)
+		local NamecallMethod = getnamecallmethod()
+		local Arguments = {...}
+
+		if typeof(Object) == "Instance" and Object.IsA(Object, "RemoteEvent") then
+			if tostring(Object) == "Damage" and NamecallMethod == "FireServer" then
+				Arguments[1].Damage = Arguments[1].BodyPart.Parent.Humanoid.MaxHealth + 10
+			end
+		end
+
+		return __Namecall(Object, unpack(Arguments))
+	end)
+
+	setreadonly(RawMetatable, true)
+
+	-- // Actions \\ --
+	--LocalPlayer.Character.Health:Destroy()
+end)
+
+SRmain.Name = "SRmain"
+SRmain.Parent = main
+SRmain.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+SRmain.Position = UDim2.new(0.0385835171, 0, 0.443564087, 0)
+SRmain.Size = UDim2.new(0, 165, 0, 54)
+
+SR.Name = "SR"
+SR.Parent = SRmain
+SR.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+SR.Position = UDim2.new(0, 0, 0.129629627, 0)
+SR.Size = UDim2.new(0, 166, 0, 47)
+SR.Font = Enum.Font.GothamBold
+SR.Text = "SR"
+SR.TextColor3 = Color3.fromRGB(255, 255, 255)
+SR.TextScaled = true
+SR.TextSize = 14.000
+SR.TextWrapped = true
+SR.MouseButton1Down:connect(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/duchayho686/duchayho686/main/SR%20Project%20Lazarus"))()
+end)
+
+closemain.Name = "closemain"
+closemain.Parent = main
+closemain.BackgroundColor3 = Color3.fromRGB(153, 153, 153)
+closemain.BorderSizePixel = 0
+closemain.Position = UDim2.new(0.717391312, 0, 0, 0)
+closemain.Size = UDim2.new(0, 51, 0, 27)
+
+close.Name = "close"
+close.Parent = closemain
+close.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+close.BackgroundTransparency = 1.000
+close.Size = UDim2.new(0, 51, 0, 27)
+close.AutoButtonColor = false
+close.Font = Enum.Font.Fondamento
+close.Text = "X"
+close.TextColor3 = Color3.fromRGB(0, 0, 0)
+close.TextScaled = true
+close.TextSize = 14.000
+close.TextWrapped = true
+close.MouseButton1Down:connect(function()
+	Frame.Visible = false
+	mainopen.Visible = true
+end)
+
+title.Name = "title "
+title.Parent = Frame
+title.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+title.BackgroundTransparency = 1.000
+title.Position = UDim2.new(0.0314136855, 0, 0, 0)
+title.Size = UDim2.new(0, 184, 0, 35)
+title.Font = Enum.Font.GothamBold
+title.Text = "Project Lazarus "
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextScaled = true
+title.TextSize = 14.000
+title.TextWrapped = true
+
+mainopen.Name = "mainopen"
+mainopen.Parent = ScreenGui
+mainopen.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+mainopen.Position = UDim2.new(0, 0, 0.329545438, 0)
+mainopen.Size = UDim2.new(0, 100, 0, 49)
+
+open.Name = "open"
+open.Parent = mainopen
+open.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+open.BackgroundTransparency = 1.000
+open.Position = UDim2.new(-0.00235290523, 0, 0.0920637473, 0)
+open.Size = UDim2.new(0, 94, 0, 38)
+open.Font = Enum.Font.RobotoCondensed
+open.Text = "OPEN"
+open.TextColor3 = Color3.fromRGB(255, 255, 255)
+open.TextScaled = true
+open.TextSize = 14.000
+open.TextWrapped = true
+open.MouseButton1Down:connect(function()
+	mainopen.Visible = false 
+	Frame.Visible = true
+end)
+
+-- Scripts:
+
+local function JKMD_fake_script() -- instakillmain.LocalScript 
+	local script = Instance.new('LocalScript', instakillmain)
+
+	function zigzag(X) return math.acos(math.cos(X*math.pi))/math.pi end
+	
+	counter = 0
+	
+	while wait(0.1)do
+		script.Parent.BackgroundColor3 = Color3.fromHSV(zigzag(counter),1,1)
+	
+		counter = counter + 0.01
+	end
+end
+coroutine.wrap(JKMD_fake_script)()
+local function KHJZ_fake_script() -- SRmain.LocalScript 
+	local script = Instance.new('LocalScript', SRmain)
+
+	function zigzag(X) return math.acos(math.cos(X*math.pi))/math.pi end
+	
+	counter = 0
+	
+	while wait(0.1)do
+		script.Parent.BackgroundColor3 = Color3.fromHSV(zigzag(counter),1,1)
+	
+		counter = counter + 0.01
+	end
+end
+coroutine.wrap(KHJZ_fake_script)()
+local function BHEIVHI_fake_script() -- close.LocalScript 
+	local script = Instance.new('LocalScript', close)
+
+	local text = script.Parent
+	local add = 10
+	wait(1)
+	local k = 1
+	while k <= 255 do
+		text.TextColor3 = Color3.new(k/255,0/255,0/255)
+		k = k + add
+		wait()
+	end
+	while true do
+		k = 1
+		while k <= 255 do
+			text.TextColor3 = Color3.new(255/255,k/255,0/255)
+			k = k + add
+			wait()
+		end
+		k = 1
+		while k <= 255 do
+			text.TextColor3 = Color3.new(255/255 - k/255,255/255,0/255)
+			k = k + add
+			wait()
+		end
+		k = 1
+		while k <= 255 do
+			text.TextColor3 = Color3.new(0/255,255/255,k/255)
+			k = k + add
+			wait()
+		end
+		k = 1
+		while k <= 255 do
+			text.TextColor3 = Color3.new(0/255,255/255 - k/255,255/255)
+			k = k + add
+			wait()
+		end
+		k = 1
+		while k <= 255 do
+			text.TextColor3 = Color3.new(k/255,0/255,255/255)
+			k = k + add
+			wait()
+		end
+		k = 1
+		while k <= 255 do
+			text.TextColor3 = Color3.new(255/255,0/255,255/255 - k/255)
+			k = k + add
+			wait()
+		end
+		while k <= 255 do
+			text.TextColor3 = Color3.new(255/255 - k/255,0/255,0/255)
+			k = k + add
+			wait()
+		end
+	end
+end
+coroutine.wrap(BHEIVHI_fake_script)()
+local function TXMLAAX_fake_script() -- Frame.LocalScript 
+	local script = Instance.new('LocalScript', Frame)
+
+	function zigzag(X) return math.acos(math.cos(X*math.pi))/math.pi end
+	
+	counter = 0
+	
+	while wait(0.1)do
+		script.Parent.BackgroundColor3 = Color3.fromHSV(zigzag(counter),1,1)
+	
+		counter = counter + 0.01
+	end
+end
+coroutine.wrap(TXMLAAX_fake_script)()
+local function DSWNEXQ_fake_script() -- open.LocalScript 
+	local script = Instance.new('LocalScript', open)
+
+	local text = script.Parent
+	local add = 10
+	wait(1)
+	local k = 1
+	while k <= 255 do
+		text.TextColor3 = Color3.new(k/255,0/255,0/255)
+		k = k + add
+		wait()
+	end
+	while true do
+		k = 1
+		while k <= 255 do
+			text.TextColor3 = Color3.new(255/255,k/255,0/255)
+			k = k + add
+			wait()
+		end
+		k = 1
+		while k <= 255 do
+			text.TextColor3 = Color3.new(255/255 - k/255,255/255,0/255)
+			k = k + add
+			wait()
+		end
+		k = 1
+		while k <= 255 do
+			text.TextColor3 = Color3.new(0/255,255/255,k/255)
+			k = k + add
+			wait()
+		end
+		k = 1
+		while k <= 255 do
+			text.TextColor3 = Color3.new(0/255,255/255 - k/255,255/255)
+			k = k + add
+			wait()
+		end
+		k = 1
+		while k <= 255 do
+			text.TextColor3 = Color3.new(k/255,0/255,255/255)
+			k = k + add
+			wait()
+		end
+		k = 1
+		while k <= 255 do
+			text.TextColor3 = Color3.new(255/255,0/255,255/255 - k/255)
+			k = k + add
+			wait()
+		end
+		while k <= 255 do
+			text.TextColor3 = Color3.new(255/255 - k/255,0/255,0/255)
+			k = k + add
+			wait()
+		end
+	end
+end
+coroutine.wrap(DSWNEXQ_fake_script)()
