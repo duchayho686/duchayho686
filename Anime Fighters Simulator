@@ -1,0 +1,116 @@
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local ScreenGui = Instance.new("ScreenGui")
+local main = Instance.new("Frame")
+local UIGradient = Instance.new("UIGradient")
+local naypramxhub = Instance.new("TextButton")
+local dollhouse = Instance.new("TextButton")
+local assasine = Instance.new("TextButton")
+local close = Instance.new("TextButton")
+local openmain = Instance.new("Frame")
+local open = Instance.new("TextButton")
+
+--Properties:
+
+ScreenGui.Parent = game.CoreGui
+
+main.Name = "main"
+main.Parent = ScreenGui
+main.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+main.Position = UDim2.new(0.435185194, 0, 0.263358772, 0)
+main.Size = UDim2.new(0, 198, 0, 247)
+main.Visible = false
+main.Active = true
+main.Draggable = true
+
+UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(28, 255, 85)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(85, 255, 255))}
+UIGradient.Parent = main
+
+naypramxhub.Name = "naypramxhub"
+naypramxhub.Parent = main
+naypramxhub.BackgroundColor3 = Color3.fromRGB(255, 73, 1)
+naypramxhub.Position = UDim2.new(0.0656565651, 0, 0.273381293, 0)
+naypramxhub.Size = UDim2.new(0, 172, 0, 43)
+naypramxhub.Font = Enum.Font.PatrickHand
+naypramxhub.Text = "naypramxhub"
+naypramxhub.TextColor3 = Color3.fromRGB(0, 0, 0)
+naypramxhub.TextScaled = true
+naypramxhub.TextSize = 14.000
+naypramxhub.TextWrapped = true
+naypramxhub.MouseButton1Down:connect(function()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/naypramx/naypramxhub/main/pornhubgames'))()
+end)
+
+dollhouse.Name = "dollhouse"
+dollhouse.Parent = main
+dollhouse.BackgroundColor3 = Color3.fromRGB(255, 73, 1)
+dollhouse.Position = UDim2.new(0.0656565651, 0, 0.700987399, 0)
+dollhouse.Size = UDim2.new(0, 172, 0, 43)
+dollhouse.Font = Enum.Font.PatrickHand
+dollhouse.Text = "dollhouse"
+dollhouse.TextColor3 = Color3.fromRGB(0, 0, 0)
+dollhouse.TextScaled = true
+dollhouse.TextSize = 14.000
+dollhouse.TextWrapped = true
+dollhouse.MouseButton1Down:connect(function()
+loadstring(game:HttpGet(('https://raw.githubusercontent.com/pspboy08/dollhouse/main/AFSGUI.lua')))()
+end)
+
+assasine.Name = "assasine"
+assasine.Parent = main
+assasine.BackgroundColor3 = Color3.fromRGB(255, 73, 1)
+assasine.Position = UDim2.new(0.0656565651, 0, 0.486412495, 0)
+assasine.Size = UDim2.new(0, 172, 0, 43)
+assasine.Font = Enum.Font.PatrickHand
+assasine.Text = "assasine"
+assasine.TextColor3 = Color3.fromRGB(0, 0, 0)
+assasine.TextScaled = true
+assasine.TextSize = 14.000
+assasine.TextWrapped = true
+assasine.MouseButton1Down:connect(function()
+loadstring(game:HttpGet("https://www.assasine.com/Scripts/Anime_Fighters_Simulator.lua", true))()
+end)
+
+close.Name = "close"
+close.Parent = main
+close.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+close.Position = UDim2.new(0.651515126, 0, 0, 0)
+close.Size = UDim2.new(0, 69, 0, 44)
+close.Font = Enum.Font.SourceSans
+close.Text = "X"
+close.TextColor3 = Color3.fromRGB(212, 60, 0)
+close.TextScaled = true
+close.TextSize = 14.000
+close.TextWrapped = true
+close.MouseButton1Down:connect(function()
+main.Visible = false
+openmain.Visible = true
+end)
+
+openmain.Name = "openmain"
+openmain.Parent = ScreenGui
+openmain.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+openmain.Position = UDim2.new(0.44650206, 0, 3.61240282e-09, 0)
+openmain.Size = UDim2.new(0, 104, 0, 36)
+openmain.Active = true
+openmain.Draggable = true
+
+
+open.Name = "open"
+open.Parent = openmain
+open.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+open.Position = UDim2.new(0.00961538777, 0, -0.0158727169, 0)
+open.Size = UDim2.new(0, 104, 0, 36)
+open.Font = Enum.Font.PermanentMarker
+open.Text = "OPEN"
+open.TextColor3 = Color3.fromRGB(0, 0, 0)
+open.TextScaled = true
+open.TextSize = 14.000
+open.TextWrapped = true
+open.MouseButton1Down:connect(function()
+openmain.Visible = false
+main.Visible = true
+end)
