@@ -1,3 +1,4 @@
+
 --[[
 Your Bizarre Adventure Script : 2021
 ]]
